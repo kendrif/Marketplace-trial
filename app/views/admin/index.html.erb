@@ -1,0 +1,33 @@
+<h1>Admin</h1>
+<p>
+It's <%= Time.now %>
+We have <%= pluralize(@total_orders, "order") %>.
+
+<h4> Incomplete orders </h4>
+
+    <% @orders.where(complete: false).each do |order| %>
+        <% cache order do %>
+            <li>
+                <h2><%= order.id %></h2>
+                <h2><%= order.name %></h2>
+                <h2><%= order.address %></h2>
+                <h2><%= order.email %></h2>
+            </li>
+        <% end %>
+    <% end %>
+
+<h4> Complete orders </h4>
+
+    <% @orders.where(complete: true).each do |order| %>
+        <% cache order do %>
+            <li>
+                <h2><%= order.id %></h2>
+                <h2><%= order.name %></h2>
+                <h2><%= order.address %></h2>
+                <h2><%= order.email %></h2>
+            </li>
+        <% end %>
+      
+    <% end %>
+
+</p>
