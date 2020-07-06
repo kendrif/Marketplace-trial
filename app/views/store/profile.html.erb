@@ -1,29 +1,30 @@
-<h1>Store#index</h1>
+<h1 class="mb-2 text-2xl text-black font-bold text-center"> </h1>
 <h1></h1>
-<p>Find me in app/views/store/index.html.erb</p>
 <% if notice %>
   <div class="alert alert-success" role="alert"><%= notice %></div>
 <% end %>
 
 <h1>Catalog</h1>
 
-<ul class="catalog">
+<div class="flex flex-wrap items-start justify-start">
   <% cache @products do %>
     <% @products.where(user_id: @account.id).each do |product| %>
       <% cache product do %>
-        <li>
-          <h2><%= product.title %></h2>
-          <p>
-            <%= sanitize(product.description) %>
-          </p>
-          <div class="price">
-            <%= number_to_currency(product.price) %>
-            <%= button_to 'Add to Order', line_items_path(product_id: product )%>
-          </div>
-        </li>
+        <div class=" bg-white relative w-full p-6 mb-6 border-2 border-white shadow sm:shadow-md md:shadow-lg rounded-lg lg:w-1/4 lg:mr-8">
+            <h3 class="mb-2 text-2xl text-black font-bold"><%= product.title %></h3>
+            <p>
+              <%= sanitize(product.description) %>
+            </p>
+            <div class="price">
+            £ <%= (product.price) %>
+            </div>
+            <div>
+            <%= button_to 'Add', line_items_path(product_id: product)%>
+            </div>
+        </div>
       <% end %>
     <% end %>
   <% end %>
-</ul>
+</div>
 
 <div id="cart" class="carts">

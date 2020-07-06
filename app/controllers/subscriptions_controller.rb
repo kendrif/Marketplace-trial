@@ -2,14 +2,14 @@ class SubscriptionsController < ApplicationController
   before_action :authenticate_user!
 
   def new
-    @product = product.find(params[:product])
+    @account = User.find_by_id(params[:id])
   end
 
   # Reference:
   # https://stripe.com/docs/connect/subscriptions
   def create
-    @project = Project.find(params[:project])
-    key = @project.user.access_code
+    @account = User.find_by_id(params[:id])
+    key = @account.user.access_code
     Stripe.api_key = key
 
     plan_id = params[:plan]
