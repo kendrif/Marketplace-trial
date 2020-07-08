@@ -10,5 +10,5 @@ class User < ApplicationRecord
   def can_receive_payments?
     uid? &&  provider? && access_code? && publishable_key?
   end
-
+ 
 end

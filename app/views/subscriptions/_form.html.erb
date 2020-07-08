@@ -1,5 +1,4 @@
-<%= form_with model: current_user, local: true, url: subscription_url, method: :post, html: { id: "payment-form", class: "stripe-form" }, data: { stripe_key: @account.publishable_key }  do |form| %>
-  <div>
+<%= form_with model: current_user, local: true, url: subscription_url, method: :post, html: { id: "payment-form", class: "stripe-form" }, data: { stripe_key: @account.publishable_key }  do |form| %>  <div>
     <label for="card-element" class="label">
       Credit or debit card
     </label>
@@ -12,7 +11,7 @@
     <div id="card-errors" role="alert" class="text-sm text-red-400"></div>
   </div>
 
-  <input type="hidden" name="account" value="<%= params[:account] %>">
+  <input type="hidden" name="account_id" value="<%= params[:account_id] %>">
 
-  <button>Back <%= number_to_currency(params[:amount]) %> /mo toward <em><%= %></em></button>
+  <button>Back <%= number_to_currency(params[:amount]) %> /mo toward <em><%=  %></em></button>
 <% end %>

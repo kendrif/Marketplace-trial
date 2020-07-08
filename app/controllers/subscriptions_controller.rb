@@ -2,18 +2,18 @@ class SubscriptionsController < ApplicationController
   before_action :authenticate_user!
 
   def new
-    @account = User.find_by_id(params[:id])
+    @account = User.find_by_id(params[:account_id])
   end
 
   # Reference:
   # https://stripe.com/docs/connect/subscriptions
   def create
-    @account = User.find_by_id(params[:id])
-    key = @account.user.access_code
+    @account = User.find_by_id(params[:account_id])
+    key = @account.access_code
     Stripe.api_key = key
+    account_suid = @account.uid
+  
 
-    plan_id = params[:plan]
-    plan = Stripe::Plan.retrieve(plan_id)
     token = params[:stripeToken]
 
 
@@ -23,21 +23,21 @@ class SubscriptionsController < ApplicationController
                 Stripe::Customer.create(email: current_user.email, source: token)
               end
 
+              
               Stripe::PaymentIntent.create({
                 customer: customer,
-                amount: @cart.total_price * 100,
+                amount: 100, 
                 confirm: true,
                 currency: 'gbp',
                 payment_method_types: ['card'],
-                application_fee_percent: 3,
+                application_fee_amount: 3,
               }, {
-                stripe_account: 'key',
+                stripe_account: account_suid
               })
 
 
     options = {
-      stripe_id: customer.id,
-      subscribed: true,
+      stripe_id: customer.id
     }
 
     options.merge!(
@@ -46,18 +46,7 @@ class SubscriptionsController < ApplicationController
       card_exp_year: params[:user][:card_exp_year],
       card_type: params[:user][:card_brand]
     )
-
-    current_user.perk_subscriptions << plan_id
-    current_user.update(options)
-
-    # Update project attributes
-    project_updates = {
-      backings_count: @project.backings_count.next,
-      current_donation_amount: @project.current_donation_amount + (plan.amount/100).to_i,
-    }
-    @project.update(project_updates)
-
-
+    
     redirect_to root_path, notice: "Your subscription was setup successfully!"
   end
 

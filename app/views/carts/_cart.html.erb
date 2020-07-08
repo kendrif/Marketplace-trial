@@ -22,9 +22,11 @@
   </div>
 
     <div class="actions">
-      <%= link_to "Back this idea for #{number_to_currency(cart.total_price)} /mo",  new_subscription_path(amount: cart.total_price, account: @account.id),  class: "btn btn-default btn-expanded" %>
+      <%= link_to "Back this idea for #{number_to_currency(cart.total_price)} /mo",  new_subscription_path(amount: cart.total_price, account_id: @account.id ),  class: "btn btn-default btn-expanded" %>
     </div>
   
-  <input type="hidden" name="product" value="<%= params[:product] %>">
+  <input type="hidden" name="9" value="<%= params[:product] %>">
+  <input type="hidden" name="ask" value= 9 >
+  
 
 </article>
