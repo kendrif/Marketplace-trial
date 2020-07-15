@@ -1,0 +1,13 @@
+                            <tr class="border-b hover:bg-orange-100 bg-gray-100">
+                                <td class="p-3 px-5"><%= product.title %></td>
+                                <td class="p-3 px-5"><%= sanitize(product.description) %></td>
+                                <td class="p-3 px-5"> £ <%= (product.price) %></td>
+                                <td class="p-3 px-5"><%= product.category_id %></td>
+                                <% if (product.available) #= 't' %>
+                                <td class="p-3 px-5"> <span class="rounded bg-green-400 py-1 px-3 text-xs font-bold">active</span> </td>
+                                <% else %>
+                                 <td class="p-3 px-5"> <span class="rounded bg-yellow-400 py-1 px-3 text-xs font-bold">inactive</span> </td>
+                                <% end %>
+                                <td><%= link_to 'Mark Available', available_product_path(product.id), method: :patch, data: { confirm: 'Are you sure? | Item will update when you refresh the page.', remote: true}, class: "available rounded py-1 px-3 text-xs font-bold"%></td>
+                                <td class="p-3 px-5"><td><%= link_to 'Edit', edit_product_path(product) %> | <%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?', remote: true}, class: "delete rounded bg-red-400 py-1 px-3 text-xs font-bold" %></td>
+                            </tr>

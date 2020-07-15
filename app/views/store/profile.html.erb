@@ -1,4 +1,4 @@
-<h1 class="mb-2 text-2xl text-black font-bold text-center">  <%= @account.publishable_key %> </h1>
+<h1 class="mb-2 text-2xl text-black font-light text-center">  <%= @account.s_name %> </h1>
 <h1></h1>
 <% if notice %>
   <div class="alert alert-success" role="alert"><%= notice %></div>
@@ -6,25 +6,38 @@
 
 <h1>Catalog</h1>
 
-<div class="flex flex-wrap items-start justify-start">
-  <% cache @products do %>
-    <% @products.where(user_id: @account.id).each do |product| %>
-      <% cache product do %>
-        <div class=" bg-white relative w-full p-6 mb-6 border-2 border-white shadow sm:shadow-md md:shadow-lg rounded-lg lg:w-1/4 lg:mr-8">
-            <h3 class="mb-2 text-2xl text-black font-bold"><%= product.title %></h3>
-            <p>
-              <%= sanitize(product.description) %>
-            </p>
-            <div class="price">
-            £ <%= (product.price) %>
-            </div>
-            <div>
-            <%= button_to 'Add', line_items_path(product_id: product)%>
-            </div>
+<% cache @categories do %>
+    <% @categories.where(user_id: @account.id).each do |category| %>
+      <% cache category do %>
+        <div class="relative w-full p-3 mb-1 rounded-lg lg:w-1/4 lg:mr-8">
+            <h3 class="mb-2 text-3xl text-black font-black"><%= category.category %></h3>
         </div>
+        <div>
+            <% cache @products do %>
+              <% @products.where(user_id: @account.id, category: category  ).each do |product| %>
+                <% cache product do %>
+                   <ul class="flex flex-col p-2">
+                    <li class="border-gray-400 flex flex-row mb-2">
+                      <div class="lg:w-1/4 lg:mr-8 w-full select-none cursor-pointer bg-gray-200 rounded-lg flex flex-1 items-center p-4  transition duration-500 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+                        <div class="flex-1 pl-1 mr-16">
+                          <div class="font-semibold"><%= product.title %></div>
+                          <div class="text-gray-600 font-medium text-sm maxlength="10"">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+                        </div>
+                            <div class="flex-2 pl-1 mr-0">
+                          <div class="font-semibold"><%= product.price %></div>
+                          <%= button_to '+', line_items_path(product_id: product), class:"text-black font-medium text-sm mt-8 px-4 py-2 bg-white rounded-full" %>
+                            </div>
+                      </div>
+                    </li>
+                  </ul>
+                <% end %>
+              <% end %>
+            <% end %>
+        </div>
+
       <% end %>
     <% end %>
   <% end %>
-</div>
 
 <div id="cart" class="carts">
+

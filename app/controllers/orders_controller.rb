@@ -2,7 +2,7 @@ class OrdersController < ApplicationController
   include CurrentCart
   before_action :set_cart, only: [:new, :create]
   before_action :ensure_cart_isnt_empty, only: :new
-  before_action :set_order, only: [:show, :edit, :update, :destroy]
+  before_action :set_order, only: [:show, :edit, :update, :destroy, :complete]
 
   # GET /orders
   # GET /orders.json
@@ -18,6 +18,7 @@ class OrdersController < ApplicationController
   # GET /orders/new
   def new
     @order = Order.new
+    @account = User.find_by_id(params[:account_id])
   end
 
   # GET /orders/1/edit
@@ -34,7 +35,7 @@ class OrdersController < ApplicationController
       if @order.save
         Cart.destroy(session[:cart_id])
         session[:cart_id] = nil
-        format.html { redirect_to store_index_url, notice: 'Thank you for your order' }
+        format.html { redirect_to new_subscription_path(account_id: @order.Storeid, amount: @order.Amount), notice: 'Thank you for your order' }
         format.json { render :show, status: :created, location: @order }
       else
         format.html { render :new }
@@ -49,12 +50,17 @@ class OrdersController < ApplicationController
     respond_to do |format|
       if @order.update(order_params)
         format.html { redirect_to @order, notice: 'Order was successfully updated.' }
+        format.js
         format.json { render :show, status: :ok, location: @order }
       else
         format.html { render :edit }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end
     end
+  end
+  
+  def complete
+    @order.toggle!(:complete)
   end
 
   # DELETE /orders/1
@@ -75,9 +81,10 @@ class OrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
-      params.require(:order).permit(:name, :address, :email, :pay_type)
+      params.require(:order).permit(:name, :address, :email, :Storeid, :Amount, :Table, :Number)
     end
 
+    
     def ensure_cart_isnt_empty
       if @cart.line_items.empty?
         redirect_to store_index_url, notice: 'Your cart is empty'

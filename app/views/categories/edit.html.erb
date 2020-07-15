@@ -1,0 +1,8 @@
+<h1>Editing Category</h1>
+
+<%= render 'form', category: @category %>
+
+<td class="btn btn-default w-full"><%= link_to 'Destroy', @category, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+<h1> | </h1>
+
+<%= link_to 'Back', admin_products_path %>

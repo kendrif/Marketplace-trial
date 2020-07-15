@@ -1,0 +1,48 @@
+   <article>       
+    <% if notice %>
+    <aside id='notice'><%= notice %></aside>
+
+    <% end %>
+                       <tbody id = "orders">
+                        <% cache @order do %>
+                              <% @orders.where(complete: false).each do |order| %>
+                                <% cache order do %>
+                            <tr class="border-b">
+                                <th class="text-left p-3 px-5">Order ID</th>
+                                <th class="text-left p-3 px-5">Customer Name</th>
+                                <th class="text-left p-3 px-5">Table Number</th>
+                                <th class="text-left p-3 px-5">Email</th>
+                                <th class="text-left p-3 px-5">Order Total</th>
+                                <th class="text-left p-3 px-5">Compleate?</th>
+
+                                <th></th>
+                            </tr>
+                             
+                            <tr class="border-b hover:bg-orange-100 bg-gray-300">
+                                <td class="p-3 px-5"><%= order.id %></td>
+                                <td class="p-3 px-5"><%= order.name %></td>
+                                <td class="p-3 px-5">FX Table</td>
+                                <td class="p-3 px-5"><%= order.email %></td>
+                                <td class="p-3 px-5">£FX<%= order.Amount %></td>
+                                <td class="p-3 px-5"> <span class="rounded bg-yellow-400 py-1 px-3 text-xs font-bold">ABC</span></td>
+                            </tr>
+                            <tr class="border-b">
+                                <th class="text-left p-3 px-5">Ordered Items</th>
+                                <th class="text-left p-3 px-5">Quantity</th>
+
+                            </tr>
+                             <% cache @line_item do %>
+                              <% LineItem.where(order_id: order.id).each do |line_item| %>
+                                <% cache line_item do %>
+                            <tr class="border-b hover:bg-orange-100 bg-gray-100">
+                                <td class="p-3 px-5"><%= line_item.product.title %></td>
+                                <td class="p-3 px-5"><%= line_item.quantity %></td>
+                            </tr>
+                        <% end %>
+                              <% end %>
+                            <% end %>
+                                <% end %>
+                              <% end %>
+                            <% end %>
+                        </tbody>
+</article>      

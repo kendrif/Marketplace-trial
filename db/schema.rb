@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_04_130313) do
+ActiveRecord::Schema.define(version: 2020_07_14_200700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,6 +49,14 @@ ActiveRecord::Schema.define(version: 2020_07_04_130313) do
   create_table "carts", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "category"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_categories_on_user_id"
   end
 
   create_table "comments", force: :cascade do |t|
@@ -92,6 +100,11 @@ ActiveRecord::Schema.define(version: 2020_07_04_130313) do
     t.boolean "complete", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "Storeid"
+    t.decimal "Amount", precision: 8, scale: 2
+    t.boolean "OrderFini", default: false
+    t.string "Number"
+    t.string "Table"
   end
 
   create_table "perks", force: :cascade do |t|
@@ -112,6 +125,8 @@ ActiveRecord::Schema.define(version: 2020_07_04_130313) do
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "category_id"
+    t.boolean "available", default: true
     t.index ["user_id"], name: "index_products_on_user_id"
   end
 
@@ -161,6 +176,7 @@ ActiveRecord::Schema.define(version: 2020_07_04_130313) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "categories", "users"
   add_foreign_key "comments", "users"
   add_foreign_key "line_items", "carts"
   add_foreign_key "line_items", "orders"

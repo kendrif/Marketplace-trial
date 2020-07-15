@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tailwind Admin Template</title>
+  <link rel="stylesheet" href="public/css/tailwind.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+  <script src='jquery.js'> </script>
+  <style>
+    .divider {
+      border-top: 1px solid rgba(255, 255, 255, .15);
+    }
+
+    .rotate-15 {
+      transform: rotate(-15deg);
+    }
+
+    .notification {
+      top: 1px;
+      right: 1px;
+      font-size: 10px;
+      padding: 2px 4px;
+    }
+  </style>
+</head>
+
+<body>
+  <div x-data="{sidebar : true}" class="flex">
+
+    <!-- Left Sidebar -->
+     <div class="h-screen border-r lg:fixed lg:w-56 bg-theme-color" :class="{ 'md:block hidden' : sidebar == false }">
+      <div
+        class="items-center px-4 py-4 font-bold leading-10 tracking-wider text-center text-black uppercase lg:flex h-18 text-md">
+        <span class="hidden ml-2 lg:inline-block"><%= current_user.s_name %> Admin</span>
+      </div>
+      <hr class="mx-4 divider">
+      <div class="mx-2 lg:mx-4">
+        <hr class="divider">
+         <div class="items-center block py-4 tracking-wide text-center text-gray-400 lg:flex lg:text-sm hover:text-white">
+          <i class="block fa fa-tachometer-alt p-2"></i>
+          <%= link_to "Dashboard", admin_index_path, class:"items-center block py-4 tracking-wide text-center text-gray-400 lg:flex lg:text-sm hover:text-white" %>
+        </div>
+
+        <hr class="divider">
+         <div class="items-center block py-4 tracking-wide text-center text-gray-400 lg:flex lg:text-sm hover:text-white">
+          <i class="fa fa-list-ul p-2"></i>
+          <%= link_to "Orders", admin_order_path, class:"items-center block py-1 tracking-wide text-center text-gray-400 lg:flex lg:text-sm hover:text-white" %>
+        </div>
+
+         <div class="items-center block py-4 tracking-wide text-center text-black lg:flex lg:text-sm hover:text-white">
+          <i class="fa fa-folder p-2"></i>
+          <%= link_to "Products", admin_products_path, class:"items-center block py-4 tracking-wide text-center text-black lg:flex lg:text-sm hover:text-white" %>
+        </div>
+
+         <div class="items-center block py-4 tracking-wide text-center text-gray-400 lg:flex lg:text-sm hover:text-white">
+          <i class="fa fa-edit p-2"></i>
+          <%= link_to "Edit Account", admin_edit_path, class:"items-center block py-4 tracking-wide text-center text-gray-400 lg:flex lg:text-sm hover:text-white" %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main content area -->
+    <div class="flex-1 bg-gray-100 lg:ml-24 lg:ml-56">
+
+      <!-- Topbar -->
+
+      <!-- Page Heading -->
+      <div class="flex-1 px-6 mb-4">
+        <h1 class="mb-2 text-3xl text-gray-700">Dashboard | Products</h1>
+
+        <!-- Content Row -->
+  
+        <!-- Charts Row  -->
+        <div class="flex flex-wrap mb-2 -mx-3">
+          <div class="w-full p-3 ">
+            <div class="bg-white rounded-md shadow">
+              <div class="px-5 py-4 font-bold bg-gray-100 border-b text-theme-color text-center text-md rounded-t-md">
+                Products 
+                <div id='new-product'>
+                    <%= link_to "New Product", new_product_path, class: "btn btn-white mb-2 lg:mb-0" %>
+                </div>
+              </div>
+                <div class="">
+
+                    <table id="products" class="w-full text-md bg-white shadow-md rounded mb-4">
+                      <tbody>
+                         <tr class="border-b bg-gray-200">
+                                <th class="text-left p-3 px-5">Title</th>
+                                <th class="text-left p-3 px-5">Description</th>
+                                <th class="text-left p-3 px-5">Price</th>
+                                <th class="text-left p-3 px-5">Category</th>
+                                <th class="text-left p-3 px-5">Status</th>
+                                <th class="text-left p-3 px-5">Toggle Status</th>
+                                <th class="text-left p-3 px-5"></th>
+                                <th class="text-left p-3 px-5">Action</th>
+                            </tr>
+
+                        <%= render @products %>
+                        
+                      </tbody>
+                    </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    <div class="flex flex-wrap mb-2 -mx-3">
+        <div class="w-full p-3 md:w-2/4 xl:w-2/5">
+            <div class="bg-white rounded-md shadow">
+              <div class="px-5 py-4 font-bold bg-gray-100 border-b text-theme-color text-md rounded-t-md">
+                Categories
+                <%= link_to "New category", new_category_path, class: "btn btn-white mb-2 lg:mb-0" %>
+              </div>
+                <div class="">
+                    <table class="w-full text-md bg-white shadow-md rounded mb-4 ">
+                        <tbody>
+                            <tr class="border-b">
+                                <th class="text-left p-3 px-5">Title</th>
+                                <th class="text-left p-3 px-5">Availability</th>
+                                <th class="text-left p-3 px-5">Edit Category</th>
+                            </tr>
+                             <% cache @Category do %>
+                              <% @categories.where(user_id: current_user.id ).each do |category| %>
+                                <% cache category do %>
+                            <tr class="border-b hover:bg-orange-100 bg-gray-100">
+                                <td class="p-3 px-5"><%= category.category %></td>
+                                <td class="p-3 px-5">Availabile</td>
+                                <td class="p-3 px-5", id="button"><%= link_to 'Edit', edit_category_path(category) %></td>
+                                
+                                        
+                            </tr>
+                                <% end %>
+                              <% end %>
+                            <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+ 
+        </div>
+
+      <!-- Footer -->
+      <div class="p-6 bg-white">
+        <div class="flex">
+          <div class="text-sm tracking-wide text-gray-600">
+            Copyright &copy; ORDERIO 2020
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+<script src="public/js/theme.js"></script>
+
+</html>

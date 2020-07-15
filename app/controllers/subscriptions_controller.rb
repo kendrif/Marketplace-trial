@@ -12,8 +12,6 @@ class SubscriptionsController < ApplicationController
     key = @account.access_code
     Stripe.api_key = key
     account_suid = @account.uid
-  
-
     token = params[:stripeToken]
 
 
@@ -47,8 +45,9 @@ class SubscriptionsController < ApplicationController
       card_type: params[:user][:card_brand]
     )
     
-    redirect_to root_path, notice: "Your subscription was setup successfully!"
-  end
+    order_fini_job.perform_now(@order)
+    redirect_to root_path, notice: "Your subscription was boner successfully!"
+    end
 
   def destroy
     subscription_to_remove = params[:id]

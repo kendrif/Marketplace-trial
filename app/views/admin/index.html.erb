@@ -1,33 +1,323 @@
-<h1>Admin</h1>
-<p>
-It's <%= Time.now %>
-We have <%= pluralize(@total_orders, "order") %>.
+<!DOCTYPE html>
+<html lang="en">
 
-<h4> Incomplete orders </h4>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tailwind Admin Template</title>
+  <link rel="stylesheet" href="public/css/tailwind.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"
+    integrity="sha256-XF29CBwU1MWLaGEnsELogU6Y6rcc5nCkhhx89nFMIDQ=" crossorigin="anonymous"></script>
+  <style>
+    .divider {Earnings Overview
+      border-top: 1px solid rgba(255, 255, 255, .15);
+    }
 
-    <% @orders.where(complete: false).each do |order| %>
-        <% cache order do %>
-            <li>
-                <h2><%= order.id %></h2>
-                <h2><%= order.name %></h2>
-                <h2><%= order.address %></h2>
-                <h2><%= order.email %></h2>
-            </li>
-        <% end %>
-    <% end %>
+    .rotate-15 {
+      transform: rotate(-15deg);
+    }
 
-<h4> Complete orders </h4>
+    .notification {
+      top: 1px;
+      right: 1px;
+      font-size: 10px;
+      padding: 2px 4px;
+    }
+  </style>
+</head>
 
-    <% @orders.where(complete: true).each do |order| %>
-        <% cache order do %>
-            <li>
-                <h2><%= order.id %></h2>
-                <h2><%= order.name %></h2>
-                <h2><%= order.address %></h2>
-                <h2><%= order.email %></h2>
-            </li>
-        <% end %>
-      
-    <% end %>
+<body>
+  <div x-data="{sidebar : true}" class="flex">
 
-</p>
+    <!-- Left Sidebar -->
+    <div class="h-screen border-r lg:fixed lg:w-56 bg-theme-color" :class="{ 'md:block hidden' : sidebar == false }">
+      <div
+        class="items-center px-4 py-4 font-bold leading-10 tracking-wider text-center text-black uppercase lg:flex h-18 text-md">
+        <span class="hidden ml-2 lg:inline-block"><%= current_user.s_name %> Admin</span>
+      </div>
+      <hr class="mx-4 divider">
+      <div class="mx-2 lg:mx-4">
+        <hr class="divider">
+         <div class="items-center block py-4 tracking-wide text-center text-black lg:flex lg:text-sm hover:text-white">
+          <i class="block fa fa-tachometer-alt p-2"></i>
+          <%= link_to "Dashboard", admin_index_path, class:"items-center block py-4 tracking-wide text-center text-black lg:flex lg:text-sm hover:text-white" %>
+        </div>
+
+        <hr class="divider">
+         <div class="items-center block py-4 tracking-wide text-center text-gray-400 lg:flex lg:text-sm hover:text-white">
+          <i class="fa fa-list-ul p-2"></i>
+          <%= link_to "Orders", admin_order_path, class:"items-center block py-1 tracking-wide text-center text-gray-400 lg:flex lg:text-sm hover:text-white" %>
+        </div>
+
+         <div class="items-center block py-4 tracking-wide text-center text-gray-400 lg:flex lg:text-sm hover:text-white">
+          <i class="fa fa-folder p-2"></i>
+          <%= link_to "Products", admin_products_path, class:"items-center block py-4 tracking-wide text-center text-gray-400 lg:flex lg:text-sm hover:text-white" %>
+        </div>
+
+         <div class="items-center block py-4 tracking-wide text-center text-gray-400 lg:flex lg:text-sm hover:text-white">
+          <i class="fa fa-edit p-2"></i>
+          <%= link_to "Edit Account", admin_edit_path, class:"items-center block py-4 tracking-wide text-center text-gray-400 lg:flex lg:text-sm hover:text-white" %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main content area -->
+    <div class="flex-1 bg-gray-100 lg:ml-24 lg:ml-56">
+
+      <!-- Topbar -->
+
+      <!-- Page Heading -->
+      <div class="flex-1 px-6 mb-4">
+        <h1 class="mb-2 text-3xl text-gray-700"><%= current_user.name %></h1>
+
+        <!-- Content Row -->
+        <div class="grid grid-cols-1 mb-2 -mx-3 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
+          <!-- Earnings (Monthly) Card Example -->
+          <div class="p-3 md:w-full">
+            <div class="p-3 bg-white border-l-4 border-blue-600 rounded-md shadow">
+              <div class="flex items-center justify-between p-2">
+                <div class="w-full pr-2">
+                  <div class="mb-1 text-xs font-semibold leading-5 text-blue-600 uppercase">Blank</div>
+                  <div class="text-xl font-bold text-gray-700">Blank</div>
+                </div>
+                <div>
+                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    viewBox="0 0 24 24" class="w-8 h-8 text-gray-400">
+                    <path
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                    </path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Earnings (Monthly) Card Example -->
+          <div class="w-full p-3">
+            <div class="p-3 bg-white border-l-4 border-indigo-600 rounded-md shadow">
+              <div class="flex items-center justify-between p-2">
+                <div class="w-full pr-2">
+                  <div class="mb-1 text-xs font-semibold leading-5 text-indigo-600 uppercase">Blank</div>
+                  <div class="text-xl font-bold text-gray-700">Blank</div>
+                </div>
+                <div>
+                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    viewBox="0 0 24 24" class="w-8 h-8 text-gray-400">
+                    <path
+                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                    </path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Earnings (Monthly) Card Example -->
+          <div class="w-full p-3">
+            <div class="p-3 bg-white border-l-4 border-orange-600 rounded-md shadow">
+              <div class="flex items-center justify-between p-2">
+                <div class="w-full pr-2">
+                  <div class="mb-1 text-xs font-semibold leading-5 text-orange-600 uppercase">Blank</div>
+                  <div class="text-xl font-bold text-gray-700">Blank</div>
+                </div>
+                <div>
+                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    viewBox="0 0 24 24" class="w-8 h-8 text-gray-400">
+                    <path
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
+                    </path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Earnings (Monthly) Card Example -->
+          <div class="w-full p-3">
+            <div class="p-3 bg-white border-l-4 border-gray-600 rounded-md shadow">
+              <div class="flex items-center justify-between p-2">
+                <div class="w-full pr-2">
+                  <div class="mb-1 text-xs font-semibold leading-5 text-gray-600 uppercase">Blank</div>
+                  <div class="text-xl font-bold text-gray-700">Blank</div>
+                </div>
+                <div>
+                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    viewBox="0 0 24 24" class="w-8 h-8 text-gray-400">
+                    <path
+                      d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z">
+                    </path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Row  -->
+        <div class="flex flex-wrap mb-2 -mx-3">
+          <div class="w-full p-3 md:w-1/2">
+            <div class="bg-white rounded-md shadow">
+              <div class="px-5 py-4 font-bold bg-gray-100 border-b text-theme-color text-md rounded-t-md">
+                Earnings Overview
+              </div>
+              <div class="p-5 leading-7 text-gray-800 text-md">
+                <canvas id="conversionsChart" class="chart-canvas"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="w-full p-3 md:w-1/2">
+            <div class="bg-white rounded-md shadow">
+              <div class="px-5 py-4 font-bold bg-gray-100 border-b text-theme-color text-md rounded-t-md">
+                Insight Overview
+              </div>
+              <div class="p-5 leading-7 text-gray-800 text-md">
+                <canvas id="chartjs-7" class="chartjs" width="undefined" height="undefined"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Recent Activity -->
+        <div class="flex flex-wrap mb-2 -mx-3">
+          <div class="w-full p-3 md:w-2/4 xl:w-2/5">
+            <div class="bg-white rounded-md shadow">
+              <div class="px-5 py-4 font-bold bg-gray-100 border-b text-theme-color text-md rounded-t-md">
+                Recent Activity
+              </div>
+              <div class="p-5 leading-7 text-gray-800 text-md">
+                <div class="flex items-center py-1 mb-1 rounded-md cursor-pointer hover:bg-gray-100">
+                  <div class="flex items-center px-2">
+                    <img class="w-10 h-10 rounded-full"
+                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=60&h=60&fit=facearea&ixid=eyJhcHBfaWQiOjF9&facepad=2"
+                      alt="User">
+                  </div>
+                  <div class="px-2">
+                    <div class="text-sm font-semibold leading-7 text-gray-700">Mario Speedwagon </div>
+                    <p class="text-sm leading-5 text-gray-600">
+                      Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    </p>
+                    <span class="block text-xs text-gray-500">4m ago</span>
+                  </div>
+                </div>
+                <div class="flex items-center py-1 mb-1 rounded-md cursor-pointer hover:bg-gray-100">
+                  <div class="flex items-center px-2">
+                    <img class="w-10 h-10 rounded-full"
+                      src="https://images.unsplash.com/photo-1568967729548-e3dbad3d37e0?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=60&h=60&ixid=eyJhcHBfaWQiOjF9&fit=facearea&facepad=2"
+                      alt="User">
+                  </div>
+                  <div class="px-2">
+                    <div class="text-sm font-semibold leading-7 text-gray-700">Anna Sthesia </div>
+                    <p class="text-sm leading-4 text-gray-600">
+                      Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    </p>
+                    <span class="block text-xs text-gray-500">1h ago</span>
+                  </div>
+                </div>
+                <div class="flex items-center py-1 mb-1 rounded-md cursor-pointer hover:bg-gray-100">
+                  <div class="flex items-center px-2">
+                    <img class="w-10 h-10 rounded-full"
+                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=60&h=60&ixid=eyJhcHBfaWQiOjF9&fit=facearea&facepad=2"
+                      alt="User">
+                  </div>
+                  <div class="px-2">
+                    <div class="text-sm font-semibold leading-7 text-gray-700">Gail Forcewind </div>
+                    <p class="text-sm leading-4 text-gray-600">
+                      Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    </p>
+                    <span class="block text-xs text-gray-500">3h ago</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="w-full p-3 md:w-2/4 xl:w-3/5">
+            <div class="bg-white rounded-md shadow">
+              <div class="px-5 py-4 font-bold bg-gray-100 border-b text-theme-color text-md rounded-t-md">
+                Checklist
+              </div>
+              <div class="px-5 pt-3 leading-7 text-gray-800 text-md">
+                <div class="px-3 py-1 mt-1 leading-8 text-gray-600 border rounded-md hover:bg-red-100">
+                  <input type="checkbox" name="" id="task-1" class="mr-2 border-blue-300 form-checkbox">
+                  <label for="task-1">
+                    On-Bboard new user from xyz company
+                  </label>
+                </div>
+                <div
+                  class="px-3 py-1 mt-1 leading-8 text-gray-600 border-b border-gray-100 rounded-md hover:bg-gray-100">
+                  <input type="checkbox" name="" id="task-2" class="mr-2 border-blue-300 form-checkbox">
+                  <label for="task-2">
+                    Refactor the core social sharing modules
+                  </label>
+                </div>
+                <div
+                  class="px-3 py-1 mt-1 leading-8 text-gray-600 border-b border-gray-100 rounded-md hover:bg-gray-100">
+                  <input type="checkbox" name="" id="task-3" class="mr-2 border-blue-300 form-checkbox">
+                  <label for="task-3">
+                    Hire new operations and facility manager
+                  </label>
+                </div>
+                <div
+                  class="px-3 py-1 mt-1 font-semibold leading-8 text-green-600 line-through bg-green-100 border-b border-gray-100 rounded-md">
+                  <input type="checkbox" name="" id="task-4" checked class="mr-2 border-blue-300 form-checkbox">
+                  <label for="task-4">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolor,
+                  </label>
+                </div>
+                <div class="px-3 py-1 mt-1 leading-8 text-gray-600 border-b border-gray-100 hover:bg-gray-100">
+                  <input type="checkbox" name="" id="task-5" class="mr-2 border-blue-300 form-checkbox">
+                  <label for="task-5">
+                    Assumenda incidunt magni explicabo debitis qui consequuntur sint
+                  </label>
+                </div>
+                <div class="px-4 py-2 mt-1 text-right border-t">
+                  <button class="px-2 py-1 text-sm text-gray-100 rounded bg-theme-color hover:bg-theme-hover-color">Add
+                    Task</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Row  -->
+        <div class="flex flex-wrap mb-2 -mx-3">
+          <div class="w-full p-3 md:w-1/2">
+            <div class="bg-white rounded-md shadow">
+              <div class="px-5 py-4 font-bold bg-gray-100 border-b text-theme-color text-md rounded-t-md">
+                Default Card
+              </div>
+              <div class="p-5 leading-7 text-gray-800 text-md">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolor, aliquam sit deleniti quis assumenda
+                incidunt magni explicabo debitis qui consequuntur sint quisquam autem accusamus optio, esse, quaerat
+                sapiente illum quibusdam?
+              </div>
+            </div>
+          </div>
+          <div class="w-full p-3 md:w-1/2">
+            <div class="bg-white rounded-md shadow">
+              <div class="px-5 py-4 font-bold bg-gray-100 border-b text-theme-color text-md rounded-t-md">
+                Default Card
+              </div>
+              <div class="p-5 leading-7 text-gray-800 text-md">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolor, aliquam sit deleniti quis assumenda
+                incidunt magni explicabo debitis qui consequuntur sint quisquam autem accusamus optio, esse, quaerat
+                sapiente illum quibusdam?
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Footer -->
+      <div class="p-6 bg-white">
+        <div class="flex">
+          <div class="text-sm tracking-wide text-gray-600">
+            Copyright &copy; Your Website 2020
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+<script src="public/js/theme.js"></script>
+
+</html>

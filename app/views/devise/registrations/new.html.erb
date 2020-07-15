@@ -1,49 +1,104 @@
 <% content_for :devise_form do %>
 
-
   <% if request.fullpath.include?('signup_new') %>
     
-    <h2 class="heading text-4xl font-bold pt-4 mb-8">Business Sign up</h2>
-      <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-      <%= render "devise/shared/error_messages", resource: resource %>
+<!DOCTYPE html>
+<html lang="en">
+
+<body class="bg-white font-family-karla h-screen">
+    <div class="w-full flex flex-wrap">
+
+        <!-- Register Section -->
+        <div class="w-full md:w-1/2 flex flex-col">
+
+              <div class="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-24">
+                <a href="#" class="text-black font-bold text-xl p-4">Orderio</a>
+            </div>
+
+
+            <div class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
+                <p class="text-center text-3xl">Join Us.</p>
+                <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+                <form class="flex flex-col pt-3 md:pt-8"
+                >
+                    <div class="mb-6">
+                        <%= f.label :'Business Name', class:"text-lg" %>
+                        <%= f.text_field :s_name, class:"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" %>
+                    </div>
+
+                          <div class="mb-6">
+                            <%= f.label :username, class:"text-lg" %>
+
+                               <div class="flex mb-4">
+                                <div class="w-1/2 h-12">
+                                 <%= f.text_field :username, autofocus: true, class:"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" %>
+                                </div>
+                                <div class="w-1/2  h-12 ">
+                                <div class="pb-8">
+                                <h5 class="text-black py-3 text-lg" >.orderio.co.uk</h5>
+                                </div>
+                                </div>
+                                </div>
+
+
+                          
+
+
+                          </div>
 
     <div class="mb-6">
-      <%= f.label :'Business Name', class:"label" %>
-      <%= f.text_field :s_name, class:"input" %>
-    </div>
-
-    <div class="mb-6">
-      <%= f.label :username, class:"label" %>
-      <%= f.text_field :username, autofocus: true, class:"input" %>
-    </div>
-
-    <div class="mb-6">
-      <%= f.label :email, class:"label" %>
-      <%= f.email_field :email, autocomplete: "email", class:"input" %>
+      <%= f.label :email, class:"text-lg" %>
+      <%= f.email_field :email, autocomplete: "email", class:"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outlineput" %>
     </div>
 
     <div class="mb-6">
       <div class="flex">
-        <%= f.label :password, class: "label" %>
+        <%= f.label :password, class: "text-lg" %>
         <% if @minimum_password_length %>
         <span class="text-xs pl-1 text-grey-dark"><em>(<%= @minimum_password_length %> characters minimum)</em></span>
         <% end %>
       </div>
-      <%= f.password_field :password, autocomplete: "new-password", class: "input" %>
-    </div>
 
-    <div class="mb-6">
-      <%= f.label :password_confirmation, class:"label" %>
-      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input" %>
-    </div>
-    <%= f.hidden_field :admin, :value => true %>
-    <div class="mb-6">
-      <%= f.submit "Sign up", class: "btn btn-default" %>
-    </div>
-
-    <hr class="border mt-6" />
+      <%= f.password_field :password, autocomplete: "new-password", class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" %>
     
-      <% end %>
+
+    </div>
+
+    <div class="mb-6">
+      <%= f.label :password_confirmation, class:"text-lg" %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" %>
+    </div>
+
+    <%= f.hidden_field :admin, :value => 't' %>
+
+    <div class="mb-6">
+      <%= f.submit "Sign up", class: "bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8" %>
+    </div>
+
+    
+                   
+                </form>
+                <div class="text-center pt-12 pb-12">
+                    <p>Already have an account?  <%= link_to "Sign in", new_user_session_path, class: "text-indigo-700"%> </p>
+                </div>
+
+              <% end %>
+
+            </div>
+
+        </div>
+
+        <!-- Image Section -->
+        <div class="w-1/2 shadow-2xl">
+            <img class="object-cover w-full h-screen hidden md:block border-gray-100">
+            
+        </div>
+    </div>
+
+</body>
+</html>
+
+
 
   <% else %>
   <h2 class="heading text-4xl font-bold pt-4 mb-8">User Sign up</h2>
@@ -51,10 +106,6 @@
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
 
-    <div class="mb-6">
-      <%= f.label :username, class:"label" %>
-      <%= f.text_field :username, autofocus: true, class:"input" %>
-    </div>
 
     <div class="mb-6">
       <%= f.label :name, class:"label" %>

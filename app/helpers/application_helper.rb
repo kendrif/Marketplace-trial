@@ -22,4 +22,6 @@ module ApplicationHelper
       content_tag :span, "Connect with Stripe"
     end
   end
+
+
 end

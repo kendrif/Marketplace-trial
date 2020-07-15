@@ -1,7 +1,7 @@
 <div class="max-w-lg m-auto">
  <% if current_user.can_receive_payments? %>
-    <h1 class="mb-6 text-3xl font-bold">Create a Product</h1>
     <%= render 'form', product: @product %>
+    <%= link_to "Back", admin_products_path %>
   <% else %>
   <div class="p-6 bg-white rounded-lg">
     <h1 class="text-3xl font-bold text-gray-900">Authorize Stripe</h1>

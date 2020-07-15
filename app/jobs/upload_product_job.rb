@@ -17,7 +17,6 @@ class UploadProductJob < ApplicationJob
           product: "#{product.title.parameterize}-p#{product.id}",
           nickname: product.title.parameterize
         })
-  
 
     end
   end

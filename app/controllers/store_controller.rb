@@ -10,6 +10,7 @@ class StoreController < ApplicationController
 
   def profile
     @products = Product.order(:title)
+    @categories = Category.order(:category)
     @account = User.find_by_id(params[:id])
   end
 
