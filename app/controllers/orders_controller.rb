@@ -35,7 +35,7 @@ class OrdersController < ApplicationController
       if @order.save
         Cart.destroy(session[:cart_id])
         session[:cart_id] = nil
-        format.html { redirect_to new_subscription_path(account_id: @order.Storeid, amount: @order.Amount), notice: 'Thank you for your order' }
+        format.html { redirect_to new_subscription_path(account_id: @order.Storeid, order: @order.id, amount: @order.amount) }
         format.json { render :show, status: :created, location: @order }
       else
         format.html { render :new }
@@ -81,7 +81,7 @@ class OrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
-      params.require(:order).permit(:name, :address, :email, :Storeid, :Amount, :Table, :Number)
+      params.require(:order).permit(:name, :address, :email, :Storeid, :amount, :Table, :Number)
     end
 
     

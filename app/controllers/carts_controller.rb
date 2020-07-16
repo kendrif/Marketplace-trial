@@ -50,7 +50,7 @@ class CartsController < ApplicationController
     @cart.destroy if @cart.id == session[:cart_id]
     session["cart_id"] = nil
     respond_to do |format|
-      format.html { redirect_to store_index_url, notice: 'Cart was successfully destroyed.' }
+      format.html { redirect_back(fallback_location: root_path), notice: 'Order has been successfully deleted.' }
       format.json { head :no_content }
     end
   end

@@ -1,8 +1,8 @@
 class SubscriptionsController < ApplicationController
-  before_action :authenticate_user!
 
   def new
     @account = User.find_by_id(params[:account_id])
+    @order = Order.find(params[:order])
   end
 
   # Reference:
@@ -12,23 +12,24 @@ class SubscriptionsController < ApplicationController
     key = @account.access_code
     Stripe.api_key = key
     account_suid = @account.uid
+    @order = Order.find(params[:order])
+    charge = @order.amount * 100
+    fee = @order.amount * 1
+  
+
     token = params[:stripeToken]
 
 
-    customer = if current_user.stripe_id?
-                Stripe::Customer.retrieve(current_user.stripe_id)
-              else
-                Stripe::Customer.create(email: current_user.email, source: token)
-              end
+    customer = Stripe::Customer.create(email: @order.email, source: token)
 
               
               Stripe::PaymentIntent.create({
                 customer: customer,
-                amount: 100, 
+                amount: (charge).to_i, 
                 confirm: true,
                 currency: 'gbp',
                 payment_method_types: ['card'],
-                application_fee_amount: 3,
+                application_fee_amount: (fee).to_i,
               }, {
                 stripe_account: account_suid
               })
@@ -45,9 +46,9 @@ class SubscriptionsController < ApplicationController
       card_type: params[:user][:card_brand]
     )
     
-    order_fini_job.perform_now(@order)
-    redirect_to root_path, notice: "Your subscription was boner successfully!"
-    end
+    redirect_to "http://www.rubyonrails.org"
+    
+  end
 
   def destroy
     subscription_to_remove = params[:id]

@@ -14,4 +14,4 @@ require("@rails/actiontext")
 
 import "stylesheets/application"
 import "controllers"
-import "components/stripe"
+import "components/stripe";

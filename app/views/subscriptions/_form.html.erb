@@ -12,6 +12,7 @@
   </div>
 
   <input type="hidden" name="account_id" value="<%= params[:account_id] %>">
+  <input type="hidden" name="order" value="<%= params[:order] %>">
 
-  <button>Back <%= number_to_currency(params[:amount]) %> /mo toward <em><%=  %></em></button>
+  <button> Pay £<%=(params[:amount]) %></button>
 <% end %>

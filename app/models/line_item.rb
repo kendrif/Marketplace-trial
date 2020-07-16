@@ -4,7 +4,7 @@ class LineItem < ApplicationRecord
   belongs_to :cart, optional: true
 
   def total_price 
-    product.price.to_i * quantity.to_i
+    product.price * quantity
   end 
   
 end

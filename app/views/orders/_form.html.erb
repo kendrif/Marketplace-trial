@@ -67,14 +67,13 @@
     <%= form.submit 'Place Order', class: "btn btn-default w-full" %>
   </div>
 
-    <div class="field">
+  <div class="field">
     <%= form.hidden_field :Storeid, value: params[:account_id] %>
   </div>
 
   <div class="field">
-    <%= form.hidden_field :Amount, value: params[:amount] %>
+    <%= form.hidden_field :amount, value: params[:amount] %>
   </div>
-
 
 
 <hr class="border mt-6" />

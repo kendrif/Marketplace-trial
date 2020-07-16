@@ -2,6 +2,7 @@ class AdminController < ApplicationController
   before_action :set_account, only: [:profile]
 
   def landingpage
+    render layout: false
   end
 
   def index
@@ -11,11 +12,22 @@ class AdminController < ApplicationController
 
   def order
     @total_orders = Order.count
-    @orders = Order.where(complete: 'f', Storeid: current_user.id).order(:created_at)
-
+    @orders = Order.where(complete: 'f', OrderFini: 't', Storeid: current_user.id).order(:created_at)
     @products = Product.order(:title)
-    @line_items = LineItem.find_by_id(params[:id]
-    )
+    @line_items = LineItem.find_by_id(params[:id])
+    @cart = Cart.find_by_id(params[:id])
+
+    def complete
+      @order.update(complete: 'true')
+    end
+
+  end
+
+  def orderarchive
+    @total_orders = Order.count
+    @orders = Order.where(complete: 't', OrderFini: 't', Storeid: current_user.id).order(:created_at)
+    @products = Product.order(:title)
+    @line_items = LineItem.find_by_id(params[:id])
     @cart = Cart.find_by_id(params[:id])
 
     def complete
@@ -30,7 +42,8 @@ class AdminController < ApplicationController
 
   def products
     @total_orders = Order.count
-    @products = Product.order(:title)
+    @products = Product.where(user_id: current_user.id).order(:title)
+
     @categories = Category.order(:category)
   end
 end

@@ -12,6 +12,7 @@ class StoreController < ApplicationController
     @products = Product.order(:title)
     @categories = Category.order(:category)
     @account = User.find_by_id(params[:id])
+    render layout: false
   end
 
 end

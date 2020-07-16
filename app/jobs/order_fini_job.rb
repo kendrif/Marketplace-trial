@@ -2,9 +2,11 @@ class OrderFiniJob < ApplicationJob
   queue_as :default
 
   def perform(order)
-    @order = order 
+    @order = order
 
-    @order.toggle!(:OrderFiniJob)
+    @order.OrderFini = 't'
+
     @order.save!
+
   end
 end

@@ -1,3 +1,8 @@
-Order#recived
+Hi, <%= @order.name %>
 
-<%= @greeting %>, find me in app/views/order_mailer/recived.text.erb
+We've received your order. 
+
+You've ordered 
+
+<%= render @order.line_items %>
+

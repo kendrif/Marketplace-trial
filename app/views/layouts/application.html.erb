@@ -31,7 +31,14 @@
     <header class="mb-2">
       <nav class="flex flex-wrap items-center justify-between px-3 py-2 text-gray-700 lg:px-10">
         <div class="flex items-center mr-6 flex-no-shrink">
-          <%= link_to "ORDERIO", root_path, class:"link text-lg tracking-wider font-semibold text-black hover:text-gray-700 uppercase hidden md:block" %>
+
+          <% if admin? %> 
+              <%= link_to "ORDERIO", admin_index_path, class:"link text-lg tracking-wider font-semibold text-black hover:text-gray-700 uppercase hidden md:block" %>
+           <% else %>
+              <h2 class= "text-lg tracking-wider font-semibold text-black uppercase hidden md:block "> "ORDERIO" </h2>
+          <% end %>
+
+
         </div>
 
         <div class="p-10">
@@ -64,13 +71,12 @@
             <% if user_signed_in? %>
                 <% if admin? %> 
             <li class=""><%= link_to "Dashboard", admin_index_path, class: "btn btn-default mb-2 lg:mr-2 lg:mb-0 block" %></li>
-            <li class=""><%= link_to "Log 4out", destroy_user_session_path, method: :delete, class:"btn btn-default mb-2 lg:mb-0 block" %></li>
+            <li class=""><%= link_to "Log out", destroy_user_session_path, method: :delete, class:"btn btn-default mb-2 lg:mb-0 block" %></li>
                  <% else %>
             <li class=""><%= link_to "Account", edit_user_registration_path, class: "btn btn-default mb-2 lg:mr-2 lg:mb-0" %></li>
-            <li class=""><%= link_to "Log 3out", destroy_user_session_path, method: :delete, class:"btn btn-default mb-2 lg:mb-0 block" %></li>
+            <li class=""><%= link_to "Log out", destroy_user_session_path, method: :delete, class:"btn btn-default mb-2 lg:mb-0 block" %></li>
                <% end %>
             <% else %>
-
               <li class=""><%= link_to "Login", new_user_session_path, class:"btn btn-default mb-2 lg:mr-2 lg:mb-0 block" %></li>
               <li class=""><%= link_to "Sign Up", new_user_registration_path, class:"btn btn-default block" %></li>
             <% end %>
@@ -83,10 +89,10 @@
             <% if user_signed_in? %>
               <% if admin? %> 
                 <%= link_to "Dashboard", admin_index_path, class: "btn btn-default mb-2 lg:mr-2 lg:mb-0 block" %>
-                <%= link_to "Log 2out", destroy_user_session_path, method: :delete, class:"btn btn-default mb-2 lg:mb-0 block" %>
+                <%= link_to "Log out", destroy_user_session_path, method: :delete, class:"btn btn-default mb-2 lg:mb-0 block" %>
               <% else %>
                 <%= link_to "Account", edit_user_registration_path, class: "btn btn-default mb-2 lg:mr-2 lg:mb-0 block" %>
-                <%= link_to "Log 1out", destroy_user_session_path, method: :delete, class:"btn btn-default mb-2 lg:mb-0 block" %>
+                <%= link_to "Log out", destroy_user_session_path, method: :delete, class:"btn btn-default mb-2 lg:mb-0 block" %>
                <% end %>
             <% else %>
 
@@ -99,25 +105,12 @@
 
       </nav>
     </header>
-
     
 
     <main class="px-4 lg:px-10">
       <%= content_for?(:content) ? yield(:content) : yield %>
     </main>
 
-<% if @cart %>
-<footer class='fixed bottom-0 w-full'>
-<div class="dropup w-full p-2 bg-indigo-800 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex h-10">
-  <button class="w-full dropbtn ">Order</button>
-  <div class="dropup-content">
-    <div id="cart" class="carts fixed bottom-0 w-full pb-12">
-        <%= render_if @cart && @cart.line_items.any?, @cart %>
-      </div>
-  </div>
-</div>
-</footer>
-<% end %>
   </body>
 
 

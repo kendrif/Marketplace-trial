@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   get 'admin/order'
   get 'admin/edit'
   get 'admin/products'
+  get 'admin/orderarchive'
 
 
   get "a/:id" => "store#profile", as: :profile

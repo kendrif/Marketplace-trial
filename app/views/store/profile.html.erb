@@ -1,16 +1,65 @@
-<h1 class="mb-2 text-2xl text-black font-light text-center">  <%= @account.s_name %> </h1>
+
 <h1></h1>
 <% if notice %>
   <div class="alert alert-success" role="alert"><%= notice %></div>
 <% end %>
 
-<h1>Catalog</h1>
+<html>
+  <head>
+    <title><%= @account.s_name %> | Digital Menu</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <%= stylesheet_link_tag  'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_pack_tag  'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'https://js.stripe.com/v3/' %>
+    <%= javascript_pack_tag  'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+ <body class="text-black bg-gray-100">
+
+  <% flash.each do |type, message| %>
+    <% if type == "alert" %>
+      <div class="bg-red-500">
+        <div class="container px-2 py-4 mx-auto font-sans font-medium text-center text-white"><%= message %></div>
+      </div>
+    <% end %>
+    <% if type == "notice" %>
+      <div class="bg-green-500">
+        <div class="container px-2 py-4 mx-auto font-sans font-medium text-center text-white"><%= message %></div>
+      </div>
+    <% end %>
+  <% end %>
+
+      <div class="fixed z-10 w-full">
+  <div class="w-full h-auto bg-white-200 shadow-xl bg-white">
+    <h1 class="mb-2 text-2xl text-black font-light text-center pt-4">  <%= @account.s_name %> </h1>
+
+    <% cache @categories do %>
+      <% @categories.where(user_id: @account.id).each do |category| %>
+        <% cache category do %>
+
+            <main class="p-2 w-full">
+            <div class="mb-5 w-full">
+            <a href="#<%= category.category %>" class="cursor-pointer bg-blue-600 hover:bg-blue-500 shadow-xl px-5 py-2 inline-block text-blue-100 hover:text-white rounded"><%= category.category %></a>
+
+        </div>
+          
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+
+<div class="pt-40">
 <% cache @categories do %>
     <% @categories.where(user_id: @account.id).each do |category| %>
       <% cache category do %>
         <div class="relative w-full p-3 mb-1 rounded-lg lg:w-1/4 lg:mr-8">
-            <h3 class="mb-2 text-3xl text-black font-black"><%= category.category %></h3>
+            <h3 class="mb-2 text-3xl text-black font-black" id="pricing"><%= category.category %></h3>
         </div>
         <div>
             <% cache @products do %>
@@ -39,5 +88,23 @@
     <% end %>
   <% end %>
 
+
+<% if @cart %>
+<footer class='fixed bottom-0 w-full '>
+<div class="dropup w-full  bg-indigo-700 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex h-10">
+  <button class="w-full dropbtn "> Order | £<%= @cart.total_price %> </button>
+  <div class="dropup-content">
+    <div id="cart" class="carts fixed bottom-0 w-full">
+        <%= render_if @cart && @cart.line_items.any?, @cart %>
+      </div>
+  </div>
+</div>
+</footer>
+<% end %>
+
+</div>
+
 <div id="cart" class="carts">
+
+
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_14_200700) do
+ActiveRecord::Schema.define(version: 2020_07_16_124251) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,10 +101,10 @@ ActiveRecord::Schema.define(version: 2020_07_14_200700) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "Storeid"
-    t.decimal "Amount", precision: 8, scale: 2
     t.boolean "OrderFini", default: false
     t.string "Number"
     t.string "Table"
+    t.decimal "amount", precision: 8, scale: 2
   end
 
   create_table "perks", force: :cascade do |t|
@@ -137,7 +137,7 @@ ActiveRecord::Schema.define(version: 2020_07_14_200700) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "current_donation_amount", default: 0
-    t.datetime "expires_at", default: "2020-08-06 10:15:59"
+    t.datetime "expires_at", default: "2020-08-15 12:42:23"
     t.string "status", default: "active"
     t.integer "backings_count", default: 0
     t.index ["user_id"], name: "index_projects_on_user_id"

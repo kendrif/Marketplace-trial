@@ -1,5 +1,5 @@
 <section class="bg-white border-t-2 border-gray-200 rounded-t-lg ">
-<article class=>
+<article>
   <% if notice %>
     <aside id="notice"><%= notice %></aside>
   <% end %>
@@ -9,16 +9,14 @@
   <table class="">
     <%= render(cart.line_items) %>
   </table>
+  
   </div>
-  <div class="actions">
-    <%= button_to 'Empty Cart', cart,
-                  method: :delete,
-     data: { confirm: 'Are you sure?' } %>
-    
-       <%= link_to 'Checkout', 
-    new_order_path(amount: cart.total_price, account_id: @account.id), method: :get, class: "checkout" %>
-      </div>
+    <div class="">
 
+     <button class="w-full "> 
+       <%= link_to "Checkout | £#{cart.total_price}", new_order_path(amount: cart.total_price, account_id: @account.id), method: :get, class: "bg-indigo-700 items-center text-indigo-100 leading-none lg:rounded-full flex lg:inline-flex h-10" %>
+      </button>
+      </div>
     </div>
   </div>
 
